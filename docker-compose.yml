@@ -1,0 +1,74 @@
+services:
+  orderservice:
+    image: ${DOCKER_REGISTRY-}orderservice
+    build:
+      context: .
+      dockerfile: OrderService/Dockerfile
+    depends_on:
+     - order.mysql
+    ports:
+    - "5000:5000"
+    - "5001:5001"
+    environment:
+      PORT: 5000
+      ConnectionStrings__OrderDatabase: "Server=order.mysql;Database=order_db;User=order_user;Password=order_password;"
+
+
+  catalogservice:
+    image: ${DOCKER_REGISTRY-}catalogservice
+    build:
+      context: .
+      dockerfile: catalogService/Dockerfile
+    depends_on:
+     - catalog.mysql
+    ports:
+    - "6000:6000"
+    - "6001:6001"
+    environment:
+      PORT: 6000
+      ConnectionStrings__CatalogDatabase: "Server=catalog-mysql;Database=catalog_db;User=catalog_user;Password=catalog_password;"
+
+  catalog.mysql:
+    image: mysql:8.0
+    container_name: catalog-mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: catalog_rootpassword
+      MYSQL_DATABASE: catalog_db
+      MYSQL_USER: catalog_user
+      MYSQL_PASSWORD: catalog_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - catalog-mysql-data:/var/lib/mysql
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+
+  order.mysql:
+    image: mysql:8.0
+    container_name: order-mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: order_rootpassword
+      MYSQL_DATABASE: order_db
+      MYSQL_USER: order_user
+      MYSQL_PASSWORD: order_password
+    ports:
+      - "3308:3306"
+    volumes:
+      - order-mysql-data:/var/lib/mysql
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  order-mysql-data:
+  catalog-mysql-data:
+
+  

@@ -36,6 +36,17 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "environmentVariables": {
+        "ASPNETCORE_HTTPS_PORTS": "6001",
+        "ASPNETCORE_HTTP_PORTS": "6000"
+      },
+      "publishAllPorts": true,
+      "useSSL": true
     }
   }
 }

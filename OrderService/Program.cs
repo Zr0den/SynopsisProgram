@@ -11,8 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<OrderDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0, 30))));
+    options.UseMySql(builder.Configuration.GetConnectionString("OrderDatabase"),
+        new MySqlServerVersion(new Version(8, 0))));
 
 var app = builder.Build();
 
@@ -28,5 +28,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+var port = builder.Configuration.GetValue<string>("PORT") ?? "5000";
+app.Urls.Add($"http://*:{port}");
 
 app.Run();

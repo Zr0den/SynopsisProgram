@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace OrderService.Controllers
+namespace CatalogService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OrderController : ControllerBase
+    public class CatalogController : Controller
     {
         [HttpGet]
         public string Get()
