@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OrderService.DB;
+using OrderService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<OrderDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("OrderDatabase"),
         new MySqlServerVersion(new Version(8, 0))));
+
+builder.Services.AddHttpClient<CatalogServiceClient>(client =>
+{
+    client.BaseAddress = new Uri("http://catalogservice:6000");
+});
 
 var app = builder.Build();
 

@@ -10,6 +10,7 @@
     <DockerServiceName>orderservice</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="init.sql" />
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>
