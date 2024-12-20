@@ -1,0 +1,1 @@
+﻿k6 run "performance_test.js"

@@ -4,6 +4,7 @@ using CatalogService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using Testing;
 
 public class CatalogControllerTests
 {

@@ -18,7 +18,7 @@ public class OrderServiceContractTests
     }
 
     [Fact]
-    public async Task ItHandlesValidProductIdsCorrectly()
+    public async Task C_ValidProductIdsHandledCorrectly()
     {
         var config = new PactConfig
         {
@@ -56,7 +56,7 @@ public class OrderServiceContractTests
     }
 
     [Fact]
-    public async Task ItHandlesMissingProductsGracefully()
+    public async Task C_MissingProductsHandledGracefully()
     {
         var config = new PactConfig
         {
@@ -89,7 +89,7 @@ public class OrderServiceContractTests
     }
 
     [Fact]
-    public async Task ItHandlesStockReductionCorrectly()
+    public async Task C_StockReductionHandledCorrectly()
     {
         var config = new PactConfig
         {

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using CatalogService.DB;
 using CatalogService.Model;
+using Testing;
 
 public class CatalogServiceIntegrationTests : IDisposable
 {
@@ -19,6 +20,7 @@ public class CatalogServiceIntegrationTests : IDisposable
 
         // Initialize the test database
         TestDatabaseInitializer.InitializeTestDatabase(_dbContext);
+        DataSeeder.SeedData(_dbContext);
     }
 
     [Fact]
