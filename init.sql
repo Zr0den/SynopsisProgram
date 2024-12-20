@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS Products (
     Stock INT NOT NULL
 );
 
--- Insert sample data into Products
 INSERT INTO Products (Name, Description, Price, Stock)
 VALUES
     ('Book A', 'A fascinating book about coding.', 10.99, 50),
@@ -20,7 +19,6 @@ VALUES
     ('Marker', 'A permanent marker.', 2.99, 150);
 
 
--- Order Database Initialization
 CREATE DATABASE IF NOT EXISTS order_db;
 
 USE order_db;
@@ -33,7 +31,6 @@ CREATE TABLE IF NOT EXISTS Orders (
     OrderDate DATETIME NOT NULL
 );
 
--- Insert sample data into Orders
 INSERT INTO Orders (CustomerId, ProductIds, TotalPrice, OrderDate)
 VALUES
     (1, '1,2', 26.48, '2024-12-19 10:00:00'),
