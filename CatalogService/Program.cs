@@ -1,6 +1,8 @@
 using CatalogService.DB;
 using Microsoft.EntityFrameworkCore;
 
+var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,9 +12,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<CatalogDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("CatalogDatabase"),
-        new MySqlServerVersion(new Version(8, 0))));
+if (environment == "Test")
+{
+    builder.Services.AddDbContext<CatalogDbContext>(options =>
+        options.UseInMemoryDatabase("CatalogTestDb")); // Use in-memory database for tests
+}
+else
+{
+    builder.Services.AddDbContext<CatalogDbContext>(options =>
+        options.UseMySql(builder.Configuration.GetConnectionString("CatalogDatabase"),
+            new MySqlServerVersion(new Version(8, 0, 29)),
+            options => options.EnableRetryOnFailure()));
+}
 
 var app = builder.Build();
 

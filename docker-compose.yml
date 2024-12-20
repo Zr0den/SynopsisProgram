@@ -48,7 +48,6 @@ services:
       timeout: 5s
       retries: 3
 
-
   order.mysql:
     image: mysql:8.0
     container_name: order-mysql-container

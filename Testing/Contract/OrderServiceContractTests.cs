@@ -12,6 +12,11 @@ public class OrderServiceContractTests
 {
     private readonly string _mockProviderServiceBaseUri = "http://localhost:9222"; //default port PactNet's mock server runs on
 
+    public OrderServiceContractTests()
+    {
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
+    }
+
     [Fact]
     public async Task ItHandlesValidProductIdsCorrectly()
     {
