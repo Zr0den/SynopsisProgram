@@ -9,7 +9,7 @@ public class PerformanceTest
         var processStartInfo = new ProcessStartInfo
         {
             FileName = "cmd.exe",
-            Arguments = "/c .\\RunK6PerformanceTests.bat", // Path to your batch file
+            Arguments = "/c .\\RunK6PerformanceTests.bat",
             RedirectStandardOutput = true,
             UseShellExecute = false,
             CreateNoWindow = true
@@ -18,7 +18,6 @@ public class PerformanceTest
         var process = Process.Start(processStartInfo);
         process.WaitForExit();
 
-        // Optionally, check process exit code to validate if tests passed
         Assert.Equal(0, process.ExitCode);
     }
 }
