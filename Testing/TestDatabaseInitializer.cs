@@ -10,8 +10,8 @@ public static class TestDatabaseInitializer
 
         context.Products.AddRange(new[]
         {
-            new Product { Name = "Test Book A", Price = 10.99m, Stock = 50 },
-            new Product { Name = "Test Book B", Price = 15.49m, Stock = 30 },
+            new Product { Name = "Test Book A", Price = 10.99m, Description ="Book A", Stock = 50 },
+            new Product { Name = "Test Book B", Price = 15.49m, Description ="Book B", Stock = 30 },
         });
 
         context.SaveChanges();

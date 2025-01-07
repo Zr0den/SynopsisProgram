@@ -27,7 +27,7 @@ public class CatalogServiceIntegrationTests : IDisposable
     public async Task AddProduct_SavesProductToDatabase()
     {
         // Arrange
-        var product = new Product { Name = "Test Book C", Price = 20.00m, Stock = 10 };
+        var product = new Product { Name = "Test Book C", Price = 20.00m, Description = "Test Book C", Stock = 10 };
 
         // Act
         _dbContext.Products.Add(product);
@@ -43,7 +43,7 @@ public class CatalogServiceIntegrationTests : IDisposable
     public async Task GetProductById_ReturnsCorrectProduct()
     {
         // Arrange
-        var product = new Product { Name = "Book B", Price = 15.49m, Stock = 30 };
+        var product = new Product { Name = "Book B", Price = 15.49m, Description = "Test Book B", Stock = 30 };
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 
@@ -60,7 +60,7 @@ public class CatalogServiceIntegrationTests : IDisposable
     public async Task UpdateProduct_UpdatesProductInDatabase()
     {
         // Arrange
-        var product = new Product { Name = "Book C", Price = 20.00m, Stock = 25 };
+        var product = new Product { Name = "Book C", Price = 20.00m, Description = "Test Book C", Stock = 25 };
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 
@@ -79,7 +79,7 @@ public class CatalogServiceIntegrationTests : IDisposable
     public async Task DeleteProduct_RemovesProductFromDatabase()
     {
         // Arrange
-        var product = new Product { Name = "Book D", Price = 25.00m, Stock = 10 };
+        var product = new Product { Name = "Book D", Price = 25.00m, Description = "Test Book D", Stock = 10 };
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 

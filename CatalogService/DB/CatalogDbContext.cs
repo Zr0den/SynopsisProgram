@@ -7,6 +7,9 @@ namespace CatalogService.DB
     {
         public CatalogDbContext(DbContextOptions<CatalogDbContext> options) : base(options) { }
 
-        public DbSet<Product> Products { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+
+        // For mocking purposes
+        protected CatalogDbContext() { }
     }
 }

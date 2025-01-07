@@ -42,8 +42,14 @@ public class CatalogControllerTests
     public async Task GetProducts_ReturnsNotFound_WhenInvalidIdsProvided()
     {
         // Arrange
+        var productList = new List<Product>
+    {
+        new Product { Id = 1, Name = "Book A", Price = 10.99m, Stock = 50 }
+    }.AsQueryable();
+
+        var mockDbSet = DbSetMockHelper.CreateMockDbSet(productList);
+
         var mockDbContext = new Mock<CatalogDbContext>();
-        var mockDbSet = DbSetMockHelper.CreateMockDbSet(new List<Product>().AsQueryable());
         mockDbContext.Setup(c => c.Products).Returns(mockDbSet.Object);
 
         var controller = new CatalogController(mockDbContext.Object);
@@ -61,13 +67,18 @@ public class CatalogControllerTests
     public void CreateProduct_AddsProductToDatabase()
     {
         // Arrange
-        var mockDbContext = new Mock<CatalogDbContext>();
-        var mockDbSet = new Mock<DbSet<Product>>();
+        var options = new DbContextOptionsBuilder<CatalogDbContext>()
+            .UseInMemoryDatabase(databaseName: "TestDatabase")
+            .Options;
+
+        var mockDbSet = DbSetMockHelper.CreateMockDbSet(new List<Product>().AsQueryable());
+        var mockDbContext = new Mock<TestableCatalogDbContext>(options);
+
         mockDbContext.Setup(c => c.Products).Returns(mockDbSet.Object);
 
         var controller = new CatalogController(mockDbContext.Object);
 
-        var newProduct = new Product { Name = "Book E", Price = 12.99m, Stock = 20 };
+        var newProduct = new Product { Name = "Book E", Price = 12.99m, Description = "Test Book E", Stock = 20 };
 
         // Act
         var result = controller.CreateProduct(newProduct) as CreatedAtActionResult;
@@ -84,27 +95,39 @@ public class CatalogControllerTests
     {
         // Arrange
         var productList = new List<Product>
-    {
-        new Product { Id = 1, Name = "Book F", Stock = 10 }
-    }.AsQueryable();
+        {
+            new Product { Id = 1, Name = "Book F", Stock = 10 }
+        }.AsQueryable();
+
+        var mockDbSet = DbSetMockHelper.CreateMockDbSet(productList); // Mocking the DbSet
 
         var mockDbContext = new Mock<CatalogDbContext>();
-        var mockDbSet = DbSetMockHelper.CreateMockDbSet(productList);
         mockDbContext.Setup(c => c.Products).Returns(mockDbSet.Object);
+        mockDbContext.Setup(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()))
+             .ReturnsAsync(1);
+
+        mockDbSet.Setup(m => m.FindAsync(It.IsAny<object[]>()))
+        .ReturnsAsync((object[] keyValues) =>
+        {
+                var productId = (int)keyValues[0]; // Cast the first parameter as int
+                return productList.FirstOrDefault(p => p.Id == productId); // Return the product with that Id
+        });
 
         var controller = new CatalogController(mockDbContext.Object);
         var stockUpdateRequest = new List<(int productId, int quantity)>
-    {
-        (1, 5)
-    };
+        {
+            (1, 5) // Request to reduce 5 units of product with ID 1
+        };
 
         // Act
         var result = await controller.ReduceStock(stockUpdateRequest) as OkObjectResult;
 
         // Assert
-        Assert.NotNull(result);
-        Assert.Equal(200, result.StatusCode);
-        Assert.Equal("Stock updated successfully.", result.Value);
-        Assert.Equal(5, productList.First().Stock); // Mocking modifies the reference
+        Assert.NotNull(result); // Ensure that the result is not null
+        Assert.Equal(200, result.StatusCode); // Status code should be 200 OK
+        Assert.Equal("Stock updated successfully.", result.Value); // Response message should match
+
+        var updatedProduct = productList.First(); // Retrieve the updated product
+        Assert.Equal(5, updatedProduct.Stock); // Ensure stock was updated correctly    }
     }
 }
